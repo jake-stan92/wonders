@@ -48,6 +48,7 @@ const App = () => {
     },
   ];
   const home = [52.635011951730206, -2.2876563383618107];
+  let wondersByDistance = [];
 
   /**
    * Calculates the haversine distance between point A, and B.
@@ -72,7 +73,7 @@ const App = () => {
       Math.pow(Math.sin(dLon / 2), 2) * Math.cos(homecoord[0]) * Math.cos(lat2);
     const c = 2 * Math.asin(Math.sqrt(a));
 
-    let finalDistance = RADIUS_OF_EARTH_IN_KM * c;
+    let finalDistance = (RADIUS_OF_EARTH_IN_KM * c).toFixed(2);
 
     if (isMiles) {
       finalDistance /= 1.60934;
@@ -81,34 +82,67 @@ const App = () => {
     return finalDistance;
   };
 
+  const SortedTable = () => {
+    const sortedArray = wondersByDistance.sort(
+      (a, b) => a.distanceAway - b.distanceAway
+    );
+    return (
+      <table>
+        <tbody>
+          <tr>
+            <th>Wonder</th>
+            <th>Distance Away (km)</th>
+          </tr>
+          {sortedArray.map((wonder, index) => {
+            return (
+              <tr key={index}>
+                <td>{wonder.name}</td>
+                <td>{wonder.distanceAway}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    );
+  };
+
   return (
     <>
-      <MapContainer center={[51.505, -0.09]} zoom={1} scrollWheelZoom={false}>
+      <MapContainer center={[51.505, -0.09]} zoom={2} scrollWheelZoom={false}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {/* <Marker position={[51.505, -0.09]}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker> */}
         <Marker position={home}></Marker>
         {wonders.map((wonder, index) => {
-          console.log(
-            haversineDistance(
-              [52.635011951730206, -2.2876563383618107], //home coord
-              [wonder.lat, wonder.lng]
-            )
+          // console.log(
+          //   haversineDistance(
+          //     [52.635011951730206, -2.2876563383618107], //home coord
+          //     [wonder.lat, wonder.lng]
+          //   )
+          // );
+          let distanceAway = haversineDistance(
+            [52.635011951730206, -2.2876563383618107], //home coord
+            [wonder.lat, wonder.lng]
           );
+          wondersByDistance.push({
+            name: wonder.name,
+            distanceAway: distanceAway,
+          });
           return (
             <Marker key={index} position={[wonder.lat, wonder.lng]}>
-              <Popup>{wonder.name}</Popup>
+              <Popup>
+                {wonder.name}
+                <br></br>
+                Distance: {distanceAway}
+                km
+              </Popup>
               <Polyline positions={[home, [wonder.lat, wonder.lng]]}></Polyline>
             </Marker>
           );
         })}
       </MapContainer>
+      <SortedTable />
     </>
   );
 };
