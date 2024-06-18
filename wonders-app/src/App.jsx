@@ -108,20 +108,15 @@ const App = () => {
 
   return (
     <>
-      <MapContainer center={[51.505, -0.09]} zoom={2} scrollWheelZoom={false}>
+      <MapContainer center={[51.505, -0.09]} zoom={2} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <Marker position={home}></Marker>
         {wonders.map((wonder, index) => {
-          // console.log(
-          //   haversineDistance(
-          //     [52.635011951730206, -2.2876563383618107], //home coord
-          //     [wonder.lat, wonder.lng]
-          //   )
-          // );
           let distanceAway = haversineDistance(
+            // distance between 2 coords
             [52.635011951730206, -2.2876563383618107], //home coord
             [wonder.lat, wonder.lng]
           );
