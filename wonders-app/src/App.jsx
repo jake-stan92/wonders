@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import { React, useEffect, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -47,8 +47,23 @@ const App = () => {
       lng: 43.2105,
     },
   ];
-  const home = [52.635011951730206, -2.2876563383618107];
+  // const home = [52.635011951730206, -2.2876563383618107];
+  const [userLocation, setUserLocation] = useState([]);
   let wondersByDistance = [];
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(success, error);
+    function success(position) {
+      setUserLocation([position.coords.latitude, position.coords.longitude]);
+      console.log(userLocation);
+    }
+
+    function error() {
+      setUserLocation([51.501104002528095, -0.1096490382108894]);
+      console.log("Unable to retrieve your location");
+      console.log(userLocation);
+    }
+  }, []);
 
   /**
    * Calculates the haversine distance between point A, and B.
@@ -108,36 +123,49 @@ const App = () => {
 
   return (
     <>
-      <MapContainer center={[51.505, -0.09]} zoom={2} scrollWheelZoom={true}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Marker position={home}></Marker>
-        {wonders.map((wonder, index) => {
-          let distanceAway = haversineDistance(
-            // distance between 2 coords
-            [52.635011951730206, -2.2876563383618107], //home coord
-            [wonder.lat, wonder.lng]
-          );
-          wondersByDistance.push({
-            name: wonder.name,
-            distanceAway: distanceAway,
-          });
-          return (
-            <Marker key={index} position={[wonder.lat, wonder.lng]}>
-              <Popup>
-                {wonder.name}
-                <br></br>
-                Distance: {distanceAway}
-                km
-              </Popup>
-              <Polyline positions={[home, [wonder.lat, wonder.lng]]}></Polyline>
-            </Marker>
-          );
-        })}
-      </MapContainer>
-      <SortedTable />
+      {userLocation.length > 1 && (
+        <>
+          <MapContainer
+            center={[51.505, -0.09]}
+            zoom={2}
+            scrollWheelZoom={true}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={userLocation}></Marker>
+            {wonders.map((wonder, index) => {
+              return <Marker key={index} position={[wonder.lat, wonder.lng]} />;
+            })}
+            {/* // func below causing markers to move? */}
+            {wonders.map((wonder, index) => {
+              let distanceAway = haversineDistance(
+                [userLocation[0], userLocation[1]],
+                [wonder.lat, wonder.lng]
+              );
+              wondersByDistance.push({
+                name: wonder.name,
+                distanceAway: distanceAway,
+              });
+              return (
+                <Marker key={index} position={[wonder.lat, wonder.lng]}>
+                  <Popup>
+                    {wonder.name}
+                    <br></br>
+                    {/* Distance: {distanceAway} */}
+                    km
+                  </Popup>
+                  <Polyline
+                    positions={[userLocation, [wonder.lat, wonder.lng]]}
+                  ></Polyline>
+                </Marker>
+              );
+            })}
+          </MapContainer>
+          <SortedTable />
+        </>
+      )}
     </>
   );
 };
