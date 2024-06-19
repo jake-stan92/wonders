@@ -8,6 +8,7 @@ import {
   Polyline,
   useMap,
 } from "react-leaflet";
+import DistanceTable from "./components/DistanceTable";
 
 const App = () => {
   const wonders = [
@@ -97,30 +98,6 @@ const App = () => {
     return finalDistance;
   };
 
-  const SortedTable = () => {
-    const sortedArray = wondersByDistance.sort(
-      (a, b) => a.distanceAway - b.distanceAway
-    );
-    return (
-      <table>
-        <tbody>
-          <tr>
-            <th>Wonder</th>
-            <th>Distance Away (km)</th>
-          </tr>
-          {sortedArray.map((wonder, index) => {
-            return (
-              <tr key={index}>
-                <td>{wonder.name}</td>
-                <td>{wonder.distanceAway}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    );
-  };
-
   return (
     <>
       {userLocation.length > 1 && (
@@ -163,7 +140,7 @@ const App = () => {
               );
             })}
           </MapContainer>
-          <SortedTable />
+          <DistanceTable wondersByDistance={wondersByDistance} />
         </>
       )}
     </>
