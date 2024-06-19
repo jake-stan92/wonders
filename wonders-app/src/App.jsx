@@ -9,6 +9,7 @@ import {
   useMap,
 } from "react-leaflet";
 import DistanceTable from "./components/DistanceTable";
+import WonderMarkers from "./components/WonderMarkers";
 
 const App = () => {
   const wonders = [
@@ -112,9 +113,10 @@ const App = () => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <Marker position={userLocation}></Marker>
-            {wonders.map((wonder, index) => {
+            {/* {wonders.map((wonder, index) => {
               return <Marker key={index} position={[wonder.lat, wonder.lng]} />;
-            })}
+            })} */}
+            <WonderMarkers wonders={wonders} />
             {/* // func below causing markers to move? */}
             {wonders.map((wonder, index) => {
               let distanceAway = haversineDistance(
