@@ -113,12 +113,8 @@ const App = () => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <Marker position={userLocation}></Marker>
+            <WonderMarkers wonders={wonders} userLocation={userLocation} />
             {/* {wonders.map((wonder, index) => {
-              return <Marker key={index} position={[wonder.lat, wonder.lng]} />;
-            })} */}
-            <WonderMarkers wonders={wonders} />
-            {/* // func below causing markers to move? */}
-            {wonders.map((wonder, index) => {
               let distanceAway = haversineDistance(
                 [userLocation[0], userLocation[1]],
                 [wonder.lat, wonder.lng]
@@ -132,7 +128,7 @@ const App = () => {
                   <Popup>
                     {wonder.name}
                     <br></br>
-                    {/* Distance: {distanceAway} */}
+                    Distance: {distanceAway}
                     km
                   </Popup>
                   <Polyline
@@ -140,7 +136,7 @@ const App = () => {
                   ></Polyline>
                 </Marker>
               );
-            })}
+            })} */}
           </MapContainer>
           <DistanceTable wondersByDistance={wondersByDistance} />
         </>
