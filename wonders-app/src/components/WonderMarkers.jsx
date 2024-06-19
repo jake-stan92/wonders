@@ -25,29 +25,3 @@ const WonderMarkers = ({ wonders, userLocation }) => {
 };
 
 export default WonderMarkers;
-
-{
-  /* {wonders.map((wonder, index) => {
-              let distanceAway = haversineDistance(
-                [userLocation[0], userLocation[1]],
-                [wonder.lat, wonder.lng]
-              );
-              wondersByDistance.push({
-                name: wonder.name,
-                distanceAway: distanceAway,
-              });
-              return (
-                <Marker key={index} position={[wonder.lat, wonder.lng]}>
-                  <Popup>
-                    {wonder.name}
-                    <br></br>
-                    Distance: {distanceAway}
-                    km
-                  </Popup>
-                  <Polyline
-                    positions={[userLocation, [wonder.lat, wonder.lng]]}
-                  ></Polyline>
-                </Marker>
-              );
-            })} */
-}

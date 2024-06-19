@@ -1,16 +1,8 @@
 import "./App.css";
 import { React, useEffect, useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  Polyline,
-  useMap,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import DistanceTable from "./components/DistanceTable";
 import WonderMarkers from "./components/WonderMarkers";
-import { haversineDistance } from "./helpers";
 
 const App = () => {
   const wonders = [
@@ -52,7 +44,6 @@ const App = () => {
   ];
   // const home = [52.635011951730206, -2.2876563383618107];
   const [userLocation, setUserLocation] = useState([]);
-  const [wondersByDistance, setWondersByDistance] = useState([]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(success, error);

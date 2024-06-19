@@ -3,7 +3,7 @@ import { haversineDistance } from "../helpers";
 
 const DistanceTable = ({ userLocation, wonders }) => {
   let wondersByDistance = [];
-  wonders.map((wonder, index) => {
+  wonders.map((wonder) => {
     let distanceAway = haversineDistance(
       [userLocation[0], userLocation[1]],
       [wonder.lat, wonder.lng]
