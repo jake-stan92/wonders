@@ -2,10 +2,10 @@ import React from "react";
 import { Marker, Popup, Polyline } from "react-leaflet";
 import { haversineDistance } from "../helpers";
 
-const WonderMarkers = (props) => {
-  return props.wonders.map((wonder, index) => {
+const WonderMarkers = ({ wonders, userLocation }) => {
+  return wonders.map((wonder, index) => {
     let distanceAway = haversineDistance(
-      [props.userLocation[0], props.userLocation[1]],
+      [userLocation[0], userLocation[1]],
       [wonder.lat, wonder.lng]
     );
     return (
@@ -17,7 +17,7 @@ const WonderMarkers = (props) => {
           km
         </Popup>
         <Polyline
-          positions={[props.userLocation, [wonder.lat, wonder.lng]]}
+          positions={[userLocation, [wonder.lat, wonder.lng]]}
         ></Polyline>
       </Marker>
     );
@@ -25,3 +25,29 @@ const WonderMarkers = (props) => {
 };
 
 export default WonderMarkers;
+
+{
+  /* {wonders.map((wonder, index) => {
+              let distanceAway = haversineDistance(
+                [userLocation[0], userLocation[1]],
+                [wonder.lat, wonder.lng]
+              );
+              wondersByDistance.push({
+                name: wonder.name,
+                distanceAway: distanceAway,
+              });
+              return (
+                <Marker key={index} position={[wonder.lat, wonder.lng]}>
+                  <Popup>
+                    {wonder.name}
+                    <br></br>
+                    Distance: {distanceAway}
+                    km
+                  </Popup>
+                  <Polyline
+                    positions={[userLocation, [wonder.lat, wonder.lng]]}
+                  ></Polyline>
+                </Marker>
+              );
+            })} */
+}

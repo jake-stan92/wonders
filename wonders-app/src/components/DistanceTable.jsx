@@ -1,7 +1,19 @@
 import React from "react";
+import { haversineDistance } from "../helpers";
 
-const DistanceTable = (props) => {
-  const sortedArray = props.wondersByDistance.sort(
+const DistanceTable = ({ userLocation, wonders }) => {
+  let wondersByDistance = [];
+  wonders.map((wonder, index) => {
+    let distanceAway = haversineDistance(
+      [userLocation[0], userLocation[1]],
+      [wonder.lat, wonder.lng]
+    );
+    wondersByDistance.push({
+      name: wonder.name,
+      distanceAway: distanceAway,
+    });
+  });
+  const sortedArray = wondersByDistance.sort(
     (a, b) => a.distanceAway - b.distanceAway
   );
   return (
